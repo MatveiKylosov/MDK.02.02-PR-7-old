@@ -46,6 +46,26 @@ namespace HttpNewsPAT
             Console.WriteLine(responseFromServer);
         }
 
+        public static void GetContent(Cookie Token)
+        {
+            // Задаём URL
+            string url = "http://news.permaviat.ru/main";
+            Debug.WriteLine($"Выполняем запрос: {url}");
+            // Создаём запрос для авторизации на сайте
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            // Создаём контейнер для Cookies
+            request.CookieContainer = new CookieContainer();
+            // Добавлям Cookie авторизированного пользователя
+            request.CookieContainer.Add(Token);
+            // Выполняем запрос, записывая результат в переменную response
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            // Выводим статус обращения
+            Debug.WriteLine($"Статус выполннения: {response.StatusCode}");
+            // Читаем ответ
+            string responseFromServer = new StreamReader(response.GetResponseStream()).ReadToEnd();
+            Console.WriteLine(responseFromServer);
+        }
+
         static void Main(string[] args)
         {
             SingIn("student", "Asdfg123");
