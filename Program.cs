@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +13,29 @@ namespace HttpNewsPAT
 {
     internal class Program
     {
+        public static void ParsingHtml(string htmlCode)
+        {
+            var html = new HtmlDocument();
+            // Загружаем код страницы в объект HTML
+            html.LoadHtml(htmlCode);
+            // Получаем структуру страницы
+            var Document = html.DocumentNode;
+            // Получаем элементы по классу News
+            IEnumerable DivsNews = Document.Descendants(0).Where(n => n.HasClass("news"));
+            // Перебираем элементы
+            foreach (HtmlNode DivNews in DivsNews)
+            {
+                // Получаем SRC картинки
+                var src = DivNews.ChildNodes[1].GetAttributeValue("src", "none");
+                // Получаем наименоване
+                var name = DivNews.ChildNodes[3].InnerText;
+                // Получаем описание
+                var description = DivNews.ChildNodes[5].InnerText;
+                // Выводим надпись
+                Console.WriteLine(name + "\n" + "Изображение: " + src + "\n" + "Описание: " + description + "\n");
+            }
+        }
+
         public static void SingIn(string Login, string Password)
         {
             // Задаём URL
